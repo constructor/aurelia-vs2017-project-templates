@@ -1,0 +1,160 @@
+{
+  "name": "$safeprojectname$",
+  "type": "project:application",
+  "bundler": {
+    "id": "webpack",
+    "displayName": "Webpack"
+  },
+$if$($aurelia_http_type$ == Http1_1)
+  "httpProtocol": {
+    "id": "http1",
+    "displayName": "HTTP/1.1"
+  },
+$endif$
+$if$($aurelia_http_type$  == Http2)
+  "httpProtocol": {
+    "id": "http2",
+    "displayName": "HTTP/2"
+  },
+$endif$
+  "build": {
+    "options": {
+      "server": "dev",
+      "extractCss": "prod",
+      "coverage": false
+    }
+  },
+  "platform": {
+    "id": "web",
+    "displayName": "Web",
+    "hmr": false,
+    "open": false,
+    "port": 8080,
+    "output": "wwwroot/dist"
+  },
+  "loader": {
+    "id": "none",
+    "displayName": "None"
+  },
+  "transpiler": {
+    "id": "babel",
+    "displayName": "Babel",
+    "fileExtension": ".js"
+  },
+$if$($aurelia_minification$ == None)
+    "markupProcessor": {
+      "id": "none",
+      "displayName": "None",
+      "fileExtension": ".html"
+    },
+$endif$
+$if$($aurelia_minification$ == Minimum)
+    "markupProcessor": {
+      "id": "minimum",
+      "displayName": "Minimum Minification",
+      "fileExtension": ".html"
+    },
+$endif$
+$if$($aurelia_minification$ == Maximum)
+    "markupProcessor": {
+      "id": "maximun",
+      "displayName": "Maximum Minification",
+      "fileExtension": ".html"
+    },
+$endif$
+$if$($aurelia_css_processing$ == None)
+  "cssProcessor": {
+    "id": "none",
+    "displayName": "None",
+    "fileExtension": ".css"
+  },
+$endif$
+$if$($aurelia_css_processing$ == Less)
+  "cssProcessor": {
+    "id": "less",
+    "displayName": "Less",
+    "fileExtension": ".less"
+  },
+$endif$
+$if$($aurelia_css_processing$ == Sass)
+  "cssProcessor": {
+    "id": "sass",
+    "displayName": "Sass",
+    "fileExtension": ".scss"
+  },
+$endif$
+$if$($aurelia_css_processing$ == PostCSS)
+  "cssProcessor": {
+    "id": "postcss",
+    "displayName": "PostCSS",
+    "fileExtension": ".css"
+  },
+$endif$
+$if$($aurelia_css_processing$ == Stylus)
+  "cssProcessor": {
+    "id": "stylus",
+    "displayName": "Stylus",
+    "fileExtension": ".styl"
+  },
+$endif$
+  "jsonProcessor": {
+    "id": "none",
+    "displayName": "None",
+    "fileExtension": ".json"
+  },
+  "editor": {
+    "id": "none",
+    "displayName": "None"
+  },
+$if$($aurelia_unit_ruinner$ == Karma)
+"unitTestRunners": [
+    {
+      "id": "karma",
+      "displayName": "Karma"
+    }
+  ],
+$endif$
+$if$($aurelia_unit_ruinner$ == Jest)
+"unitTestRunners": [
+    {
+      "id": "jest",
+      "displayName": "Jest"
+    }
+  ],
+$endif$
+$if$($aurelia_integration_testing$ == None)
+  "integrationTestRunner": {
+    "id": "none",
+    "displayName": "None"
+  },
+$endif$
+$if$($aurelia_integration_testing$ == Protractor)
+  "integrationTestRunner": {
+    "id": "protractor",
+    "displayName": "Protractor"
+  },
+$endif$
+  "paths": {
+    "root": "src",
+    "resources": "resources",
+    "elements": "resources/elements",
+    "attributes": "resources/attributes",
+    "valueConverters": "resources/value-converters",
+    "bindingBehaviors": "resources/binding-behaviors"
+  },
+  "packageManager": "yarn"
+$if$($aurelia_unit_ruinner$ == Karma)
+,
+  "testFramework": {
+    "id": "jasmine",
+    "displayName": "Jasmine"
+  }
+$endif$
+$if$($aurelia_unit_ruinner$ == Jest)
+,
+  "testFramework": {
+    "id": "jasmine",
+    "displayName": "Jasmine"
+  }
+$endif$
+}

@@ -1,0 +1,125 @@
+  ___ _  _ ___ _____ ___ _   _  ___ _____ ___ ___  _  _ ___ 
+ |_ _| \| / __|_   _| _ \ | | |/ __|_   _|_ _/ _ \| \| / __|
+  | || .` \__ \ | | |   / |_| | (__  | |  | | (_) | .` \__ \
+ |___|_|\_|___/ |_| |_|_\\___/ \___| |_| |___\___/|_|\_|___/
+                                                            
+
+Ensure dependencies are installed with 'yarn install' and the Aurelia project is 
+built, then build and run the Visual Studio project and browse to '/App' to see the Aurelia project.
+
+The instructions below should no longer be followed... ;)
+
+NOTE: These templates are the starting point for discussion and not intended for release.
+
+==========================================================================
+
+
+Take a look at Views/Home/Index.cshtml and make sure that it contains the following parts:
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div aurelia-app="main">Loading...</div>
+
+@section scripts {
+<environment names="Production">
+   <script type="text/javascript" asp-src-include="~/dist/common.*.chunk.js" asp-append-version="true"></script>
+</environment>
+<environment names="Development, Staging, Production">
+   <script type="text/javascript" asp-src-include="~/dist/vendor.*.chunk.js" asp-append-version="true"></script>
+</environment>
+<environment names="Development">
+   <script type="text/javascript" src="~/dist/app.bundle.js" asp-append-version="true"></script>
+</environment>
+<environment names="Staging, Production">
+   <script type="text/javascript" asp-src-include="~/dist/app.*.bundle.js" asp-append-version="true"></script>
+</environment>
+}
+
+That's it for Index.cshtml
+
+
+Open at Views/Shared/_Layout.cshtml.readme.txt and make sure that it contains the following parts:
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>@ViewData["Title"] - Aurelia</title>
+
+        <link rel="stylesheet" href="~/dist/vendor.css" asp-append-version="true">
+    </head>
+    <body>
+        @RenderBody()
+
+        @RenderSection("scripts", required: false)
+    </body>
+</html>
+
+That's it for _Layout.cshtml
+
+
+If you're not yet using ASP.NET Core 2.1 (or don't have the Microsoft.AspNetCore.App package installed) then you need to install JavascriptServices.
+This can be done through the following command: "dotnet add package Microsoft.AspNetCore.SpaServices". 
+
+Afterwards, open the Startup.cs file and add the following "using" statement at the top of the file:
+
+"using Microsoft.AspNetCore.SpaServices.Webpack;"
+
+Then move on to the Configure() method. Make sure that this method contains the following code, and add missing parts accordingly:
+
+if (env.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+    app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
+    {
+      HotModuleReplacement = true, 
+      ConfigFile="webpack.netcore.config.js",
+      HotModuleReplacementClientOptions = new Dictionary<string,string>{
+        {"reload", "true"}
+      }
+    });
+}
+else
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseMvc(routes =>
+{
+    routes.MapRoute(
+        name: "default",
+        template: "{controller=Home}/{action=Index}/{id?}");
+
+    routes.MapSpaFallbackRoute(
+        name: "spa-fallback",
+        defaults: new { controller = "Home", action = "Index" });
+});
+
+
+Then, in the ConfigureServices method, make sure that the application uses Mvc:
+
+public void ConfigureServices(IServiceCollection services)
+{
+  services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+}
+
+
+That's it for the Startup.cs file.
+
+If you're using Typescript then it's necessary to instruct Visual Studio not to transpile Typescript. This can be done by opening up the .csproj file.
+In this .csproj file you need to specify a TypeScriptToolsVersion and TypeScriptCompileBlocked like so:
+
+<PropertyGroup>
+  <TargetFramework>netcoreapp2.1</TargetFramework>
+  <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+  <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+</PropertyGroup>
+
+That's it for the .csproj file.
